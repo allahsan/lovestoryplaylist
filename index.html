@@ -1,0 +1,1746 @@
+<div class="song-card" data-audio="Alec Benjamin - Let Me Down Slowly.mp3"><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Story Playlist - Modern Love Experience</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white;
+            position: relative;
+        }
+        
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.3;
+            object-fit: cover;
+        }
+        
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 20, 147, 0.4) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.4) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(30, 144, 255, 0.3) 0%, transparent 50%),
+                        linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 20, 40, 0.9));
+            z-index: -1;
+            animation: gradientMove 20s ease infinite;
+        }
+        
+        @keyframes gradientMove {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+        
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+            padding: 60px 0;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 20, 147, 0.3), transparent);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: pulse 4s ease infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.3; }
+            50% { transform: translateX(-50%) scale(1.2); opacity: 0.6; }
+        }
+        
+        .header h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff1493, #8b2bfe, #1e90ff, #ff6b9d);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientAnimation 8s ease infinite;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
+        }
+        
+        @keyframes gradientAnimation {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            opacity: 0.8;
+            margin-bottom: 40px;
+            letter-spacing: 0.5px;
+        }
+        
+        .playlist-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 18px 36px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .playlist-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .playlist-btn:hover::before {
+            left: 100%;
+        }
+        
+        .playlist-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(255, 20, 147, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .chapter {
+            margin-bottom: 100px;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .chapter.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .chapter-number {
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0.6;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .chapter-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .chapter-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, currentColor, transparent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .chapter.visible .chapter-title::after {
+            transform: scaleX(1);
+        }
+        
+        .spark .chapter-title { color: #ffd700; }
+        .deepening .chapter-title { color: #ff1493; }
+        .shift .chapter-title { color: #ff8c00; }
+        .heartbreak .chapter-title { color: #dc143c; }
+        .moving-forward .chapter-title { color: #32cd32; }
+        
+        .songs-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .song-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border-radius: 24px;
+            padding: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+        }
+        
+        .song-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .song-card:hover::before {
+            opacity: 1;
+        }
+        
+        .song-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+        
+        .song-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .song-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, currentColor, rgba(255, 255, 255, 0.5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .song-icon {
+            width: 24px;
+            height: 24px;
+            opacity: 0.6;
+        }
+        
+        .song-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        
+        .song-artist {
+            font-size: 1.1rem;
+            opacity: 0.7;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+        
+        .song-description {
+            font-size: 1rem;
+            opacity: 0.8;
+            line-height: 1.6;
+            font-weight: 300;
+            border-left: 2px solid currentColor;
+            padding-left: 20px;
+            font-style: italic;
+            margin-bottom: 25px;
+        }
+        
+        .audio-controls {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .play-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .play-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+        }
+        
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .play-btn.playing {
+            background: linear-gradient(135deg, #ff1493, #8b2bfe);
+            animation: pulse-play 2s ease infinite;
+        }
+        
+        @keyframes pulse-play {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 20, 147, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 20, 147, 0); }
+        }
+        
+        .seek-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .seek-bar {
+            position: relative;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .seek-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ff1493, #8b2bfe, #1e90ff);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s ease;
+            position: relative;
+        }
+        
+        .seek-progress::after {
+            content: '';
+            position: absolute;
+            right: -2px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .seek-bar:hover .seek-progress::after {
+            opacity: 1;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            font-weight: 500;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .volume-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+        
+        .volume-btn:hover {
+            opacity: 1;
+        }
+        
+        .volume-slider {
+            width: 60px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        audio {
+            display: none;
+        }
+        
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(30px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff1493, #8b2bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #ff1493, #8b2bfe);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: #ff1493;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff1493, #8b2bfe);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .header-cta {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .header-cta:hover {
+            background: rgba(255, 20, 147, 0.2);
+            border-color: rgba(255, 20, 147, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .main-footer {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(30px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 100px;
+            padding: 60px 0 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 20, 147, 0.1), transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(138, 43, 226, 0.1), transparent 50%);
+            z-index: -1;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff1493, #8b2bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+        
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff1493, #8b2bfe);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .footer-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: rgba(255, 20, 147, 0.2);
+            border-color: rgba(255, 20, 147, 0.4);
+            transform: translateY(-3px);
+        }
+        
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #ff1493;
+            transform: translateX(5px);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+        
+        .footer-stats {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff1493, #8b2bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .body-padding {
+            padding-top: 80px;
+            padding-bottom: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                text-align: center;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .footer-stats {
+                justify-content: center;
+            }
+        }
+        
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .floating-heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.1;
+            animation: floatUp 12s infinite linear;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        .geometric-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .geometric-shape {
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: rotate 20s infinite linear;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .songs-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .song-card {
+                padding: 24px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .chapter {
+                margin-bottom: 60px;
+            }
+        }
+        
+        .glow-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 20, 147, 0.3), transparent);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: glow 8s ease infinite;
+            z-index: -1;
+        }
+        
+        @keyframes glow {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </div>
+    
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section footer-brand">
+                <div class="footer-logo">
+                    <div class="footer-logo-icon">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </div>
+                    Love Story
+                </div>
+                <p class="footer-description">
+                    A sonic journey through the chapters of love, heartbreak, and healing. Every song tells a story, every melody carries an emotion.
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                        </svg>
+                    </a>
+                    <a href="https://music.youtube.com/playlist?list=PLb-AJPS4jLWIOzNBGlqJv1GiK6nrNaFZz&si=TwR3MkGr59TvlzJD" target="_blank" class="social-link">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.097.118.11.221.081.343-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.750-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001 12.017.001z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Chapters</h3>
+                <ul class="footer-links">
+                    <li><a href="#spark">The Spark</a></li>
+                    <li><a href="#deepening">Deepening</a></li>
+                    <li><a href="#shift">The Shift</a></li>
+                    <li><a href="#heartbreak">Heartbreak</a></li>
+                    <li><a href="#moving-forward">Moving Forward</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Experience</h3>
+                <ul class="footer-links">
+                    <li><a href="#" onclick="document.querySelector('.playlist-btn').click()">Listen Now</a></li>
+                    <li><a href="#" onclick="document.querySelector('.song-card .play-btn').click()">Start Journey</a></li>
+                    <li><a href="#">Download Playlist</a></li>
+                    <li><a href="#">Share Story</a></li>
+                    <li><a href="#">About Paola</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:love@story.com">Email</a></li>
+                    <li><a href="#">Feedback</a></li>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-stats">
+                <div class="stat-item">
+                    <span class="stat-number">14</span>
+                    <span class="stat-label">Songs</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">5</span>
+                    <span class="stat-label">Chapters</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Emotions</span>
+                </div>
+            </div>
+            <div>
+                <p>&copy; 2025 Love Story Playlist. Crafted with 💕 for Paola.</p>
+            </div>
+        </div>
+    </footer>
+                Love Story
+            </div>
+            <nav class="nav-menu">
+                <a href="#spark" class="nav-link">The Spark</a>
+                <a href="#deepening" class="nav-link">Deepening</a>
+                <a href="#shift" class="nav-link">The Shift</a>
+                <a href="#heartbreak" class="nav-link">Heartbreak</a>
+                <a href="#moving-forward" class="nav-link">Moving Forward</a>
+            </nav>
+            <a href="https://music.youtube.com/playlist?list=PLb-AJPS4jLWIOzNBGlqJv1GiK6nrNaFZz&si=TwR3MkGr59TvlzJD" target="_blank" class="header-cta">Listen Now</a>
+        </div>
+    </header>
+
+    <div class="noise"></div>
+    <div class="bg-overlay"></div>
+    <div class="floating-elements"></div>
+    <div class="geometric-bg"></div>
+    
+    <div class="container body-padding">
+        <div class="header">
+            <div class="glow-effect"></div>
+            <h1>LOVE STORY</h1>
+            <p class="subtitle">A sonic journey through emotion & memory</p>
+            <a href="https://music.youtube.com/playlist?list=PLb-AJPS4jLWIOzNBGlqJv1GiK6nrNaFZz&si=TwR3MkGr59TvlzJD" target="_blank" class="playlist-btn">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                Experience the Playlist
+            </a>
+        </div>
+        
+        <div class="chapter spark" id="spark">
+            <div class="chapter-header">
+                <div class="chapter-number">Chapter I</div>
+                <h2 class="chapter-title">The Spark</h2>
+            </div>
+            <div class="songs-container">
+                <div class="song-card" data-audio="Until I Found You - Stephen Sanchez.mp3">
+                    <div class="song-header">
+                        <div class="song-number">01</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Until I Found You</div>
+                    <div class="song-artist">Stephen Sanchez</div>
+                    <div class="song-description">The discovery of love, that moment when everything clicks</div>
+                    <div class="audio-controls">
+                        <button class="play-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        <div class="seek-container">
+                            <div class="seek-bar">
+                                <div class="seek-progress"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <audio preload="metadata">
+                        <source src="/file/Until I Found You - Stephen Sanchez.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="song-card" data-audio="rhianne - Somewhere Only We Know.mp3">
+                    <div class="song-header">
+                        <div class="song-number">02</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Somewhere Only We Know</div>
+                    <div class="song-artist">rhianne</div>
+                    <div class="song-description">Finding your special place together, intimacy building</div>
+                    <div class="audio-controls">
+                        <button class="play-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        <div class="seek-container">
+                            <div class="seek-bar">
+                                <div class="seek-progress"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <audio preload="metadata">
+                        <source src="/file/rhianne - Somewhere Only We Know.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="song-card" data-audio="Alphaville - Forever Young.mp3">
+                    <div class="song-header">
+                        <div class="song-number">03</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Forever Young</div>
+                    <div class="song-artist">Alphaville</div>
+                    <div class="song-description">The hopeful, eternal feeling of new love</div>
+                    <div class="audio-controls">
+                        <button class="play-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        <div class="seek-container">
+                            <div class="seek-bar">
+                                <div class="seek-progress"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <audio preload="metadata">
+                        <source src="/file/Alphaville - Forever Young.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chapter deepening" id="deepening">
+            <div class="chapter-header">
+                <div class="chapter-number">Chapter II</div>
+                <h2 class="chapter-title">Deepening</h2>
+            </div>
+            <div class="songs-container">
+                <div class="song-card" data-audio="Kina ft. Snow - Can We Kiss Forever (Slowed + Reverb).mp3">
+                    <div class="song-header">
+                        <div class="song-number">04</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 11H7v3h2v-3zm4 0h-2v3h2v-3zm4 0h-2v3h2v-3zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Can We Kiss Forever</div>
+                    <div class="song-artist">Farizki (Slowed Reverb)</div>
+                    <div class="song-description">Wanting moments to last forever, deeper connection</div>
+                    <div class="audio-controls">
+                        <button class="play-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        <div class="seek-container">
+                            <div class="seek-bar">
+                                <div class="seek-progress"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <audio preload="metadata">
+                        <source src="/file/Kina ft. Snow - Can We Kiss Forever (Slowed + Reverb).mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="song-card" data-audio="Past Lives - Don't Wake Me I'm Not Dreaming.mp3">
+                    <div class="song-header">
+                        <div class="song-number">05</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Don't Wake Me I'm Not Dreaming</div>
+                    <div class="song-artist">Past Lives</div>
+                    <div class="song-description">The surreal happiness of being in love</div>
+                    <div class="audio-controls">
+                        <button class="play-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        <div class="seek-container">
+                            <div class="seek-bar">
+                                <div class="seek-progress"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <audio preload="metadata">
+                        <source src="/file/Past Lives - Don't Wake Me I'm Not Dreaming.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="song-card" data-audio="Lady Gaga, Bruno Mars - Die With A Smile.mp3">
+                    <div class="song-header">
+                        <div class="song-number">06</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Die With A Smile</div>
+                    <div class="song-artist">Lady Gaga & Bruno Mars</div>
+                    <div class="song-description">Commitment and devotion at the peak</div>
+                    <div class="audio-controls">
+                        <button class="play-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        <div class="seek-container">
+                            <div class="seek-bar">
+                                <div class="seek-progress"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <audio preload="metadata">
+                        <source src="/file/Lady Gaga, Bruno Mars - Die With A Smile.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chapter shift" id="shift">
+            <div class="chapter-header">
+                <div class="chapter-number">Chapter III</div>
+                <h2 class="chapter-title">The Shift</h2>
+            </div>
+            <div class="songs-container">
+                <div class="song-card" data-audio="Lana Del Rey - Summertime Sadness.mp3">
+                    <div class="song-header">
+                        <div class="song-number">07</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Summertime Sadness</div>
+                    <div class="song-artist">Lana Del Rey</div>
+                    <div class="song-description">Bittersweet moments, sensing change coming</div>
+                    <div class="audio-controls">
+                        <button class="play-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        <div class="seek-container">
+                            <div class="seek-bar">
+                                <div class="seek-progress"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <audio preload="metadata">
+                        <source src="/file/Lana Del Rey - Summertime Sadness.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="song-card" data-audio="Billie Eilish, Khalid - lovely.mp3">
+                    <div class="song-header">
+                        <div class="song-number">08</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">lovely</div>
+                    <div class="song-artist">Billie Eilish & Khalid</div>
+                    <div class="song-description">Beautiful but melancholic, relationship strain</div>
+                    <div class="audio-controls">
+                        <button class="play-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        <div class="seek-container">
+                            <div class="seek-bar">
+                                <div class="seek-progress"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <audio preload="metadata">
+                        <source src="/file/Billie Eilish, Khalid - lovely.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chapter heartbreak" id="heartbreak">
+            <div class="chapter-header">
+                <div class="chapter-number">Chapter IV</div>
+                <h2 class="chapter-title">Heartbreak</h2>
+            </div>
+            <div class="songs-container">
+                <div class="song-card" data-audio="Lewis Capaldi - Someone You Loved.mp3">
+                    <div class="song-header">
+                        <div class="song-number">09</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Someone You Loved</div>
+                    <div class="song-artist">Lewis Capaldi</div>
+                    <div class="song-description">The immediate pain of loss</div>
+                    <div class="audio-controls">
+                        <button class="play-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        <div class="seek-container">
+                            <div class="seek-bar">
+                                <div class="seek-progress"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <audio preload="metadata">
+                        <source src="/file/Lewis Capaldi - Someone You Loved.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="song-card" data-audio="Duncan Laurence - Arcade.mp3">
+                    <div class="song-header">
+                        <div class="song-number">10</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 11H7v3h2v-3zm4 0h-2v3h2v-3zm4 0h-2v3h2v-3zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Arcade</div>
+                    <div class="song-artist">Duncan Laurence</div>
+                    <div class="song-description">Fighting for something that's slipping away</div>
+                    <div class="audio-controls">
+                        <button class="play-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        <div class="seek-container">
+                            <div class="seek-bar">
+                                <div class="seek-progress"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <audio preload="metadata">
+                        <source src="/file/Duncan Laurence - Arcade.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="song-card" data-audio="SLANDER ft. Dylan Matthew - Love Is Gone (Acoustic).mp3">
+                    <div class="song-header">
+                        <div class="song-number">11</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Love Is Gone (Acoustic)</div>
+                    <div class="song-artist">SLANDER & Dylan Matthew</div>
+                    <div class="song-description">Accepting the end</div>
+                    <div class="audio-controls">
+                        <button class="play-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        <div class="seek-container">
+                            <div class="seek-bar">
+                                <div class="seek-progress"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <audio preload="metadata">
+                        <source src="/file/SLANDER ft. Dylan Matthew - Love Is Gone (Acoustic).mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chapter moving-forward" id="moving-forward">
+            <div class="chapter-header">
+                <div class="chapter-number">Chapter V</div>
+                <h2 class="chapter-title">Moving Forward</h2>
+            </div>
+            <div class="songs-container">
+                <div class="song-card">
+                    <div class="song-header">
+                        <div class="song-number">12</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Let Me Down Slowly</div>
+                    <div class="song-artist">Alec Benjamin</div>
+                    <div class="song-description">Asking for gentleness in the ending</div>
+                </div>
+                <div class="song-card">
+                    <div class="song-header">
+                        <div class="song-number">13</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 11H7v3h2v-3zm4 0h-2v3h2v-3zm4 0h-2v3h2v-3zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Moral of the Story</div>
+                    <div class="song-artist">Ashe</div>
+                    <div class="song-description">Learning from the experience</div>
+                </div>
+                                    <div class="song-card">
+                    <div class="song-header">
+                        <div class="song-number">14</div>
+                        <svg class="song-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">Viva La Vida</div>
+                    <div class="song-artist">Coldplay</div>
+                    <div class="song-description">Reflection on what was lost but finding strength</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Create floating hearts with modern aesthetic
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = Math.random() > 0.5 ? '♥' : '◆';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.color = `hsl(${Math.random() * 60 + 300}, 70%, 60%)`;
+            heart.style.animationDelay = Math.random() * 8 + 's';
+            heart.style.animationDuration = (Math.random() * 4 + 8) + 's';
+            return heart;
+        }
+        
+        // Create geometric shapes
+        function createGeometricShape() {
+            const shape = document.createElement('div');
+            shape.className = 'geometric-shape';
+            const size = Math.random() * 100 + 50;
+            shape.style.width = size + 'px';
+            shape.style.height = size + 'px';
+            shape.style.left = Math.random() * 100 + '%';
+            shape.style.top = Math.random() * 100 + '%';
+            shape.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            shape.style.animationDuration = (Math.random() * 20 + 10) + 's';
+            shape.style.animationDelay = Math.random() * 5 + 's';
+            return shape;
+        }
+        
+        const floatingContainer = document.querySelector('.floating-elements');
+        const geometricContainer = document.querySelector('.geometric-bg');
+        
+        // Initialize floating elements
+        for (let i = 0; i < 15; i++) {
+            floatingContainer.appendChild(createFloatingHeart());
+        }
+        
+        for (let i = 0; i < 8; i++) {
+            geometricContainer.appendChild(createGeometricShape());
+        }
+        
+        // Continuous heart generation
+        setInterval(() => {
+            const heart = createFloatingHeart();
+            floatingContainer.appendChild(heart);
+            
+            setTimeout(() => {
+                if (heart.parentNode) {
+                    heart.parentNode.removeChild(heart);
+                }
+            }, 12000);
+        }, 2000);
+        
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.chapter').forEach(chapter => {
+            observer.observe(chapter);
+        });
+        
+        // Enhanced hover effects for song cards
+        document.querySelectorAll('.song-card').forEach(card => {
+            card.addEventListener('mouseenter', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05))`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.background = 'rgba(255, 255, 255, 0.05)';
+            });
+        });
+        
+        // Playlist button interaction
+        document.querySelector('.playlist-btn').addEventListener('click', (e) => {
+            const btn = e.target;
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                btn.style.transform = '';
+            }, 150);
+        });
+        
+        // Dynamic color themes based on scroll position
+        const chapters = document.querySelectorAll('.chapter');
+        const colors = [
+            'rgba(255, 215, 0, 0.3)',    // Gold for spark
+            'rgba(255, 20, 147, 0.3)',   // Deep pink for deepening
+            'rgba(255, 140, 0, 0.3)',    // Orange for shift
+            'rgba(220, 20, 60, 0.3)',    // Crimson for heartbreak
+            'rgba(50, 205, 50, 0.3)'     // Lime green for moving forward
+        ];
+        
+        window.addEventListener('scroll', () => {
+            const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            const colorIndex = Math.floor(scrollPercent * colors.length);
+            const bgOverlay = document.querySelector('.bg-overlay');
+            
+            if (colorIndex < colors.length) {
+                const currentColor = colors[colorIndex];
+                bgOverlay.style.background = `
+                    radial-gradient(circle at 20% 80%, ${currentColor} 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.4) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 40%, rgba(30, 144, 255, 0.3) 0%, transparent 50%),
+                    linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 20, 40, 0.9))
+                `;
+            }
+        });
+        
+        // Parallax effect for header
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('.header');
+            header.style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
+        
+        // Add click sound effect simulation
+        document.querySelectorAll('.song-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // Visual feedback
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 100);
+            });
+        });
+        
+        // Audio Player Functionality
+        let currentlyPlaying = null;
+        
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        function setupAudioControls() {
+            document.querySelectorAll('.song-card').forEach(card => {
+                const audio = card.querySelector('audio');
+                const playBtn = card.querySelector('.play-btn');
+                const seekBar = card.querySelector('.seek-bar');
+                const seekProgress = card.querySelector('.seek-progress');
+                const currentTimeEl = card.querySelector('.current-time');
+                const totalTimeEl = card.querySelector('.total-time');
+                const volumeSlider = card.querySelector('.volume-slider');
+                const volumeBtn = card.querySelector('.volume-btn');
+                
+                // Load metadata
+                audio.addEventListener('loadedmetadata', () => {
+                    totalTimeEl.textContent = formatTime(audio.duration);
+                });
+                
+                // Play/Pause functionality
+                playBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    if (currentlyPlaying && currentlyPlaying !== audio) {
+                        currentlyPlaying.pause();
+                        const prevCard = currentlyPlaying.closest('.song-card');
+                        const prevBtn = prevCard.querySelector('.play-btn');
+                        prevBtn.classList.remove('playing');
+                        prevBtn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+                    }
+                    
+                    if (audio.paused) {
+                        audio.play();
+                        playBtn.classList.add('playing');
+                        playBtn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+                        currentlyPlaying = audio;
+                    } else {
+                        audio.pause();
+                        playBtn.classList.remove('playing');
+                        playBtn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+                        currentlyPlaying = null;
+                    }
+                });
+                
+                // Update progress
+                audio.addEventListener('timeupdate', () => {
+                    if (audio.duration) {
+                        const progress = (audio.currentTime / audio.duration) * 100;
+                        seekProgress.style.width = progress + '%';
+                        currentTimeEl.textContent = formatTime(audio.currentTime);
+                    }
+                });
+                
+                // Seek functionality
+                seekBar.addEventListener('click', (e) => {
+                    const rect = seekBar.getBoundingClientRect();
+                    const pos = (e.clientX - rect.left) / rect.width;
+                    audio.currentTime = pos * audio.duration;
+                });
+                
+                // Volume control
+                volumeSlider.addEventListener('input', (e) => {
+                    audio.volume = e.target.value / 100;
+                });
+                
+                // Volume mute toggle
+                volumeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (audio.volume > 0) {
+                        audio.volume = 0;
+                        volumeSlider.value = 0;
+                        volumeBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
+                    } else {
+                        audio.volume = 0.7;
+                        volumeSlider.value = 70;
+                        volumeBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+                    }
+                });
+                
+                // Audio ended
+                audio.addEventListener('ended', () => {
+                    playBtn.classList.remove('playing');
+                    playBtn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+                    seekProgress.style.width = '0%';
+                    currentTimeEl.textContent = '0:00';
+                    currentlyPlaying = null;
+                });
+                
+                // Set initial volume
+                audio.volume = 0.7;
+            });
+        }
+        
+        // Initialize audio controls when page loads
+        setupAudioControls();
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-link, .footer-links a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    const headerHeight = 80;
+                    const targetPosition = targetElement.offsetTop - headerHeight;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Header scroll effect
+        let lastScrollY = 0;
+        const header = document.querySelector('.main-header');
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > 100) {
+                header.style.background = 'rgba(0, 0, 0, 0.3)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.1)';
+            }
+            
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                header.style.transform = 'translateY(0)';
+            }
+            
+            lastScrollY = currentScrollY;
+        });
+    </script>
+</body>
+</html>
